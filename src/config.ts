@@ -3,10 +3,7 @@ import { registerAs } from '@nestjs/config';
 export default registerAs('config', () => {
   return {
     mongo: {
-      dbName: process.env.MONGO_DB,
-      port: parseInt(process.env.MONGO_PORT, 10),
-      host: process.env.MONGO_HOST,
-      connection: process.env.MONGO_CONNECTION,
+      uri: process.env.MONGO_URI
     },
     jwtSecret: process.env.JWT_SECRET
   };
