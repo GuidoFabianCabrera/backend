@@ -21,7 +21,7 @@ export class LocationService {
   }
 
   create(data: CreateLocationDto) {
-    const newModel = new this.locationModel(data);
+    const newModel = new this.locationModel({ ...data, created: new Date().toJSON() });
     return newModel.save();
   }
 

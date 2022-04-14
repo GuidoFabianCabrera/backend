@@ -22,16 +22,16 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
 import { RolesGuard } from '../auth/guards/roles.guard'
 import { Role } from '../auth/models/roles.model'
 
-@UseGuards(JwtAuthGuard, RolesGuard)
-@ApiTags('companies')
-@Controller('companies')
+@UseGuards(JwtAuthGuard)
+@ApiTags('characters')
+@Controller('characters')
 export class CompanyController {
   constructor(private companyService: CompanyService) { }
 
   @Public()
   @Get()
   @ApiOperation({
-    summary: 'List of companies',
+    summary: 'List of characters',
   })
   findAll() {
     return this.companyService.findAll();
@@ -43,7 +43,6 @@ export class CompanyController {
     return this.companyService.findOne(id);
   }
 
-  @Roles(Role.ADMIN)
   @Post()
   create(@Body() payload: CreateCompanyDto) {
     return this.companyService.create(payload);

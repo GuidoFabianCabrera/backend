@@ -1,12 +1,19 @@
-import { IsString, IsNotEmpty, IsEmail, Length, ValidateNested, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsEmail, Length, ValidateNested, IsOptional, ValidateIf, ValidationOptions, IsDefined, IsNotEmptyObject, IsObject } from 'class-validator';
 import { PartialType, ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+
+function IsNullable(validationOptions?: ValidationOptions) {
+  return ValidateIf((_object, value) => value !== null, validationOptions);
+}
 
 class Origin {
+  @IsNullable()
   @IsOptional()
   @IsString()
   @ApiProperty()
   readonly name: string;
 
+  @IsNullable()
   @IsOptional()
   @IsString()
   @ApiProperty()
@@ -38,13 +45,28 @@ export class CreateCompanyDto {
   @ApiProperty()
   readonly gender: string;
 
-  @ValidateNested()
-  @ApiProperty()
-  readonly origin: Origin;
+  // @IsNullable()
+  // @ValidateNested()
+  // @ApiProperty()
+  // readonly origin: Origin;
 
+  @IsDefined()
+  @IsObject()
   @ValidateNested()
-  @ApiProperty()
-  readonly location: Origin;
+  @Type(() => Origin)
+  origin!: Origin;
+
+
+  @IsDefined()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => Origin)
+  location!: Origin;
+
+  // @IsNullable()
+  // @ValidateNested()
+  // @ApiProperty()
+  // readonly location: Origin;
 
   @IsString()
   @IsNotEmpty()
@@ -59,9 +81,6 @@ export class CreateCompanyDto {
   @IsNotEmpty()
   @ApiProperty()
   readonly url: string;
-
-
-
 }
 
 export class UpdateCompanyDto extends PartialType(CreateCompanyDto) { }
